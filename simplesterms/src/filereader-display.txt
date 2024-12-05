@@ -1,0 +1,144 @@
+import React, { useState } from "react";
+import * as pdfjsLib from "pdfjs-dist"; // Import pdf.js to read PDF files
+
+// Set PDF.js worker source (this might fix the issues you're facing)
+pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+
+const FileReaderComponent = () => {
+  const [fileText, setFileText] = useState("");  // State to hold the text extracted from the file
+  const [loading, setLoading] = useState(false);  // State to show loading spinner
+  const [error, setError] = useState("");  // State to hold error messages
+  const [wordCounts, setWordCounts] = useState([]); // State to store the top 20 word counts
+
+  // Handle file upload
+  const handleFileChange = async (event) => {
+    const file = event.target.files[0];  // Get the uploaded file
+
+    if (file) {
+      setLoading(true);  // Start loading
+      setError("");  // Clear previous errors
+      setWordCounts([]);  // Reset previous word counts
+
+      // If the file is a PDF
+      if (file.type === "application/pdf") {
+        const reader = new FileReader(); // Use the built-in FileReader API
+
+        reader.onload = async (e) => {
+          const typedArray = new Uint8Array(e.target.result);
+
+          try {
+            const pdf = await pdfjsLib.getDocument(typedArray).promise; // Load the PDF
+            let text = "";
+
+            // Extract text from each page of the PDF
+            for (let i = 1; i <= pdf.numPages; i++) {
+              const page = await pdf.getPage(i);  // Get each page of the PDF
+              const textContent = await page.getTextContent();  // Extract text
+              const pageText = textContent.items.map((item) => item.str).join(" ");
+              text += pageText + "\n";  // Append the text from each page
+            }
+
+            setFileText(text);  // Set the extracted text to state
+            calculateWordFrequency(text);  // Calculate word frequencies
+
+          } catch (err) {
+            console.error("Error reading PDF:", err);
+            setError("Error reading PDF. Please try another file.");
+          }
+
+          setLoading(false);  // Stop loading
+        };
+
+        reader.readAsArrayBuffer(file);  // Read the PDF file as an ArrayBuffer
+      }
+      // If the file is a TXT file
+      else if (file.type === "text/plain") {
+        const reader = new FileReader(); // Use the built-in FileReader API
+
+        reader.onload = (e) => {
+          const text = e.target.result;
+          setFileText(text);  // Set the text content directly from the file
+          calculateWordFrequency(text);  // Calculate word frequencies
+          setLoading(false);  // Stop loading
+        };
+
+        reader.readAsText(file);  // Read the TXT file as text
+      } else {
+        setError("Please upload a valid PDF or TXT file.");
+        setLoading(false);  // Stop loading
+      }
+    }
+  };
+
+  // Function to calculate the word frequency
+  const calculateWordFrequency = (text) => {
+    const words = text
+      .toLowerCase() // Convert to lowercase
+      .replace(/[^\w\s]/g, "") // Remove punctuation
+      .split(/\s+/); // Split text into words by whitespace
+
+    const wordMap = {};
+
+    // Count frequency of each word
+    words.forEach((word) => {
+      if (word) {
+        wordMap[word] = (wordMap[word] || 0) + 1;
+      }
+    });
+
+    // Sort words by frequency and get the top 20
+    const sortedWords = Object.entries(wordMap)
+      .sort((a, b) => b[1] - a[1]) // Sort by frequency (high to low)
+      .slice(0, 20); // Take the top 20
+
+    setWordCounts(sortedWords); // Update the word count state
+  };
+
+  return (
+    <div className="container mt-5">
+      <h2>File Reader with Word Frequency</h2>
+      <input
+        type="file"
+        accept=".pdf, .txt"
+        onChange={handleFileChange}
+        className="form-control mb-3"
+      />
+
+      {loading && (
+        <div className="spinner-border text-primary" role="status">
+          <span className="sr-only">Loading...</span>
+        </div>
+      )}
+
+      {error && <div className="alert alert-danger">{error}</div>} {/* Show error message */}
+
+      {/* Display word frequency count */}
+      {wordCounts.length > 0 && (
+        <div className="mt-4">
+          <h4>Top 20 Most Frequent Words:</h4>
+          <ul>
+            {wordCounts.map(([word, count], index) => (
+              <li key={index}>
+                {word}: {count} times
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {!loading && !error && fileText && (
+        <div>
+          <h4>Extracted Text:</h4>
+          <textarea
+            className="form-control"
+            rows="15"
+            value={fileText}
+            readOnly
+          />
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default FileReaderComponent;
