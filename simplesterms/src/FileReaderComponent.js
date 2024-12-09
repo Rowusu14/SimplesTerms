@@ -9,7 +9,7 @@ const stopWords = [
   "a", "about", "above", "after", "again", "against", "all", "am", "an", "and", "any", "are", "aren't", "as", "at", "be", "because", 
   "been", "before", "being", "below", "between", "both", "but", "by", "can't", "cannot", "could", "couldn't", "couldnt", "did", "didn't", 
   "do", "does", "doesn't", "doing", "don't", "down", "during", "each", "few", "for", "from", "further", "had", "hadn't", "hadnt", "has", 
-  "hasn't", "hasnt", "have", "haven't", "haven't", "having", "he", "he'd", "he'll", "he's", "her", "here", "here's", "here's", "hers", 
+  "hasn't", "hasnt", "have", "haven't", "haven't", "having", "he", "his", "he'd", "he'll", "he's", "her", "here", "here's", "here's", "hers", 
   "herself", "he's", "how", "how's", "how'd", "how'd", "however", "i", "i'd", "i'll", "i'm", "i've", "i'm", "if", "i'll", "i'm", "i've", 
   "in", "into", "is", "isn't", "it", "it'd", "it'll", "it’s", "it's", "it’s", "it's", "its", "it's", "it'll", "it's", "i've", "i'm", "let's", 
   "let's", "more", "more", "most", "mustn't", "my", "myself", "myself", "my", "next", "no", "nor", "not", "of", "off", "on", "once", "only", 
@@ -114,7 +114,7 @@ const FileReaderComponent = () => {
 
   return (
     <div className="container mt-5">
-      <h2>Upload Here!</h2>
+      <h2>Upload Your File Here!</h2>
       <input
         type="file"
         accept=".pdf, .txt"
