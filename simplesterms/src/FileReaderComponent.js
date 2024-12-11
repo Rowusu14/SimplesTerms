@@ -117,34 +117,34 @@ const FileReaderComponent = () => {
     setLoading(true);
     setSummary("");
     setError("");
-
+  
     try {
-      const response = await fetch("https://api-inference.huggingface.co/models/facebook/bart-large-cnn", {
+      const response = await fetch("https://backend2-etep.onrender.com/summarize", {
         method: "POST",
         headers: {
-          Authorization: "Bearer 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", //i'm going to try to make this into a backend site, technically not supposed to share this
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ inputs: fileText }),
+        body: JSON.stringify({ text: fileText }),
       });
-
+  
       if (!response.ok) {
-        throw new Error(`API Error: ${response.statusText}`);
+        throw new Error(`Backend Error: ${response.statusText}`);
       }
-
+  
       const data = await response.json();
       if (data.error) {
         throw new Error(data.error);
       }
-
-      setSummary(data[0].summary_text);
+  
+      setSummary(data.summary);
     } catch (err) {
-      console.error("Error calling API:", err);
+      console.error("Error calling backend:", err);
       setError("Failed to Summarize Text. This is likely due to your document being too long.");
     } finally {
       setLoading(false);
     }
   };
+  
   //THIS IS WHAT THE USER SEES
   return (
     <div className="container mt-5">
