@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import * as pdfjsLib from "pdfjs-dist"; // Import pdf.js to read PDF files
+import * as pdfjsLib from "pdfjs-dist"; // Needed to read PDF files
 
-// Set PDF.js worker source (this might fix the issues you're facing)
+// Set PDF.js up (online tutorial used for this)
 pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
 
-// List of common stop words to exclude
+// List of common words to exclude
+// List of common words to exclude
 const stopWords = [
   "a", "about", "above", "after", "again", "against", "all", "am", "an", "and", "any", "are", "aren't", "as", "at", "be", "because", 
   "been", "before", "being", "below", "between", "both", "but", "by", "can't", "cannot", "could", "couldn't", "couldnt", "did", "didn't", 
@@ -26,7 +27,8 @@ const FileReaderComponent = () => {
   const [fileText, setFileText] = useState("");  // State to hold the text extracted from the file
   const [loading, setLoading] = useState(false);  // State to show loading spinner
   const [error, setError] = useState("");  // State to hold error messages
-  const [wordCounts, setWordCounts] = useState([]); // State to store the top 20 word counts
+  const [wordCounts, setWordCounts] = useState([]); // State to store the top 10 words
+  const [summary, setSummary] = useState(""); // State for API-generated summary
 
   // Handle file upload
   const handleFileChange = async (event) => {
@@ -34,12 +36,12 @@ const FileReaderComponent = () => {
 
     if (file) {
       setLoading(true);  // Start loading
-      setError("");  // Clear previous errors
-      setWordCounts([]);  // Reset previous word counts
+      setError("");  // Clear previous errors, if needed
+      setWordCounts([]);  // Reset previous word counts from previous files, if needed
 
       // If the file is a PDF
       if (file.type === "application/pdf") {
-        const reader = new FileReader(); // Use the built-in FileReader API
+        const reader = new FileReader();
 
         reader.onload = async (e) => {
           const typedArray = new Uint8Array(e.target.result);
@@ -56,8 +58,8 @@ const FileReaderComponent = () => {
               text += pageText + "\n";  // Append the text from each page
             }
 
-            setFileText(text);  // Set the extracted text to state
-            calculateWordFrequency(text);  // Calculate word frequencies
+            setFileText(text);
+            calculateWordFrequency(text);
 
           } catch (err) {
             console.error("Error reading PDF:", err);
@@ -71,47 +73,79 @@ const FileReaderComponent = () => {
       }
       // If the file is a TXT file
       else if (file.type === "text/plain") {
-        const reader = new FileReader(); // Use the built-in FileReader API
+        const reader = new FileReader();
 
         reader.onload = (e) => {
           const text = e.target.result;
           setFileText(text);  // Set the text content directly from the file
           calculateWordFrequency(text);  // Calculate word frequencies
-          setLoading(false);  // Stop loading
+          setLoading(false);  // Stops loading display
         };
 
-        reader.readAsText(file);  // Read the TXT file as text
+        reader.readAsText(file);
       } else {
         setError("Please upload a valid PDF or TXT file.");
-        setLoading(false);  // Stop loading
+        setLoading(false); 
       }
     }
   };
 
-  // Function to calculate the word frequency, excluding stop words and words with less than 2 characters
   const calculateWordFrequency = (text) => {
     const words = text
-      .toLowerCase() // Convert to lowercase
-      .replace(/[^\w\s]/g, "") // Remove punctuation
-      .split(/\s+/); // Split text into words by whitespace
+      .toLowerCase() // So count isn't case sensitive
+      .replace(/[^\w\s]/g, "") // Removes punctuation
+      .split(/\s+/); // Split text into words by spaces
 
     const wordMap = {};
 
-    // Count frequency of each word, excluding stop words and words with less than 2 characters
+    // Counting frequencies
     words.forEach((word) => {
       if (word && !stopWords.includes(word) && word.length > 1) {
         wordMap[word] = (wordMap[word] || 0) + 1;
       }
     });
 
-    // Sort words by frequency and get the top 20
+    // Sorting
     const sortedWords = Object.entries(wordMap)
-      .sort((a, b) => b[1] - a[1]) // Sort by frequency (high to low)
-      .slice(0, 20); // Take the top 20
-
+      .sort((a, b) => b[1] - a[1]) // Sorting by frequency
+      .slice(0, 10); // Taking the top 10
     setWordCounts(sortedWords); // Update the word count state
   };
 
+  // This is where it calls the API, happens on button press
+  const summarizeText = async () => {
+    setLoading(true);
+    setSummary("");
+    setError("");
+
+    try {
+      const response = await fetch("https://api-inference.huggingface.co/models/facebook/bart-large-cnn", {
+        method: "POST",
+        headers: {
+          Authorization: "Bearer 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", //i'm going to try to make this into a backend site, technically not supposed to share this
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ inputs: fileText }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`API Error: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      if (data.error) {
+        throw new Error(data.error);
+      }
+
+      setSummary(data[0].summary_text);
+    } catch (err) {
+      console.error("Error calling API:", err);
+      setError("Failed to Summarize Text. This is likely due to your document being too long.");
+    } finally {
+      setLoading(false);
+    }
+  };
+  //THIS IS WHAT THE USER SEES
   return (
     <div className="container mt-5">
       <h2>Upload Your File Here!</h2>
@@ -130,10 +164,9 @@ const FileReaderComponent = () => {
 
       {error && <div className="alert alert-danger">{error}</div>} {/* Show error message */}
 
-      {/* Display word frequency count */}
       {wordCounts.length > 0 && (
         <div className="mt-4">
-          <h4>Top 20 Most Frequent "Buzz Words":</h4>
+          <h4>Top 10 Most Frequent "Buzz Words":</h4>
           <ul>
             {wordCounts.map(([word, count], index) => (
               <li key={index}>
@@ -145,14 +178,18 @@ const FileReaderComponent = () => {
       )}
 
       {!loading && !error && fileText && (
-        <div>
-          <h4>Extracted Text:</h4>
-          <textarea
-            className="form-control"
-            rows="15"
-            value={fileText}
-            readOnly
-          />
+        <button
+          className="btn btn-primary mt-3"
+          onClick={summarizeText}
+        >
+          Summarize Text
+        </button>
+      )}
+
+      {summary && (
+        <div className="mt-4">
+          <h4>Summary:</h4>
+          <p>{summary}</p>
         </div>
       )}
     </div>

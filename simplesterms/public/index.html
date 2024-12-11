@@ -29,7 +29,6 @@
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#program">Upload</a></li>
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#contact">File Upload</a></li>
                         <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#portfolio">Types of Documents</a></li>
                         <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#about">About</a></li>
 
@@ -51,13 +50,13 @@
                     <div class="divider-custom-line"></div>
                 </div>
                 <!-- Masthead Subheading-->
-                <p class="masthead-subheading font-weight-light mb-0">An AI Generated Program that Helps You Understand Your Legal Documents</p>
+                <p class="masthead-subheading font-weight-light mb-0">An AI Program that Helps You Understand Your Legal Documents Quickly!</p>
             </div>
         </header>
         <!-- Portfolio Section-->
         <section class="page-section portfolio" id="program">
             <div class="container" id="root">
-                <!-- This should be where the react is.-->
+                <!-- This should be where the react is displayed (on the webpage).-->
     
                 <!-- Icon Divider-->
                 <div class="divider-custom">
@@ -72,8 +71,8 @@
         <section class="page-section" id="contact">
             <div class="container">
                 <!-- Contact Section Heading-->
-                <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Tell us about your document!</h2>
-                <h5 class="text-center"> Tell us more about the type of document you are uploading so that we can provide you with the 
+                <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Tell us about your document!</h2> <br>
+                <h3 class="text-center"> Specify type of document you are uploading so that we can provide you with the 
                     most accurate legal summaries. 
                 </h5>
                 <!-- Icon Divider-->
@@ -82,64 +81,26 @@
                     <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
                     <div class="divider-custom-line"></div>
                 </div>
-                <!-- Contact Section Form-->
-                <div class="row justify-content-center">
-                    <div class="col-lg-8 col-xl-7">
-                        <!-- * * * * * * * * * * * * * * *-->
-                        <!-- * * SB Forms Contact Form * *-->
-                        <!-- * * * * * * * * * * * * * * *-->
-                        <!-- This form is pre-integrated with SB Forms.-->
-                        <!-- To make this form functional, sign up at-->
-                        <!-- https://startbootstrap.com/solution/contact-forms-->
-                        <!-- to get an API token!-->
-                        <form id="contactForm" data-sb-form-api-token="API_TOKEN">
-                            <!-- Name input-->
-                            <div class="form-floating mb-3">
-                                <input class="form-control" id="name" type="text" placeholder="Enter your name..." data-sb-validations="required" />
-                                <label for="name">Full name</label>
-                                <div class="invalid-feedback" data-sb-feedback="name:required">A name is required.</div>
-                            </div>
-                            <!-- Email address input-->
-                            <div class="form-floating mb-3">
-                                <input class="form-control" id="email" type="email" placeholder="name@example.com" data-sb-validations="required,email" />
-                                <label for="email">Email address</label>
-                                <div class="invalid-feedback" data-sb-feedback="email:required">An email is required.</div>
-                                <div class="invalid-feedback" data-sb-feedback="email:email">Email is not valid.</div>
-                            </div>
-                            <!-- Phone number input-->
-                            <div class="form-floating mb-3">
-                                <input class="form-control" id="phone" type="tel" placeholder="(123) 456-7890" data-sb-validations="required" />
-                                <label for="phone">Phone number</label>
-                                <div class="invalid-feedback" data-sb-feedback="phone:required">A phone number is required.</div>
-                            </div>
-                            <!-- Message input-->
-                            <div class="form-floating mb-3">
-                                <textarea class="form-control" id="message" type="text" placeholder="Enter your message here..." style="height: 10rem" data-sb-validations="required"></textarea>
-                                <label for="message">Message</label>
-                                <div class="invalid-feedback" data-sb-feedback="message:required">A message is required.</div>
-                            </div>
-                            <!--Document type input-->
                             <div>
-                                <input class = "form-control" id = "documents" type = "text" placeholder = "Select your document type here" style = "height: 10 rem" data-sb-validations = "required"></textarea>
-                                
-                                
-                                <input type="radio" id="contracts" name="fav_language" value="Contracts">
+                                <h5>Select your document type here.</h3>
+                    
+                                <input type="radio" id="contracts" name="fav_language" value="Contracts"/>
                                 <label for="contracts">Contracts</label><br>
                                 
-                                <input type="radio" id="terms" name="fav_language" value="Terms and Conditions">
-                                <label for="terms">Terms and Conditions</label><br>
-                                
-                                <input type="radio" id="wills" name="fav_language" value="Wills and Testaments">
-                                <label for="wills">Wills and Testaments</label><br>
+                                <input type="radio" id="terms" name="fav_language" value="Terms and Conditions"/>
+                               <label for="terms">Terms and Conditions</label><br>
+                               
+                               <input type="radio" id="wills" name="fav_language" value="Wills and Testaments"/>
+                               <label for="wills">Wills and Testaments</label><br>
                                 
-                                <input type="radio" id="letters" name="fav_language" value="Legal Letters">
-                                <label for="letters">Legal Letters</label><br>
+                                <input type="radio" id="letters" name="fav_language" value="Legal Letters"/>
+                               <label for="letters">Legal Letters</label><br>
                                 
-                                <input type="radio" id="court" name="fav_language" value="Court Documents">
-                                <label for="court">Court Documents</label><br>
-
-                                <input type="radio" id="jurisdictions" name="fav_language" value="Obligations and Jurisdictions">
-                                <label for="jurisdictions">Obligations and Jurisdictions</label><br>
+                                <input type="radio" id="court" name="fav_language" value="Court Documents"/>
+                               <label for="court">Court Documents</label><br>
+                               
+                               <input type="radio" id="other" name="fav_language" value="Obligations and Jurisdictions"/>
+                               <label for="jurisdictions">Other</label><br>
 
                                 
                             </div>
@@ -161,7 +122,7 @@
                             <!-- an error submitting the form-->
                             <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3">Error sending message!</div></div>
                             <!-- Submit Button-->
-                            <button class="btn btn-primary btn-xl disabled" id="submitButton" type="submit">Submit!</button>
+                            <button class="btn btn-primary btn-xl" id="submitButton" type="submit">Submit!</button>
                         </form>
                     </div>
                 </div>
@@ -172,7 +133,7 @@
         <section class="page-section portfolio" id="portfolio">
             <div class="container">
                 <!-- Portfolio Section Heading-->
-                <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Types of Documents</h2>
+                <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Types of Documents <br>& How we Help!</h2>
                 <!-- Icon Divider-->
                 <div class="divider-custom">
                     <div class="divider-custom-line"></div>
@@ -183,7 +144,7 @@
                 <div class="row justify-content-center">
                     <!-- Portfolio Item 1-->
                     <div class="col-md-6 col-lg-4 mb-5">
-                        <h5 class="text-center"> Contracts</h5>
+                        <h5 class="text-center">Contracts</h5>
                         <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal1">
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                 <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
@@ -233,7 +194,7 @@
                     </div>
                     <!-- Portfolio Item 6-->
                     <div class="col-md-6 col-lg-4">
-                        <h5 class="text-center">Obligations & Jurisdictions</h5>
+                        <h5 class="text-center">Other</h5>
                         <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal6">
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                 <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
@@ -261,10 +222,9 @@
                     <div class="col-lg-4 me-auto"><p class="lead">Our project began last year as a proposition that became the 1st Place winner and Crowd Choice pick of the Villanova Idea Challenge of 2023. SimplesTerms is a React program with Bootstrap customization {put new things we learned to make this here} </p></div>
                 </div>
                 <!-- About Section Button-->
-                <div class="text-center mt-4">
-                    <a class="btn btn-xl btn-outline-light" href="https://startbootstrap.com/theme/freelancer/">
-                        <i class="fas fa-download me-2"></i>
-                        Free Download!
+                <div class="text-center">
+                    <a class="btn btn-xl btn-outline-light" href="about.html">
+                        Full Details Here!
                     </a>
                 </div>
             </div>
@@ -479,7 +439,7 @@
                             <div class="row justify-content-center">
                                 <div class="col-lg-8">
                                     <!-- Portfolio Modal - Title-->
-                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">Obligations & Jurisdictions</h2>
+                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">Other Documents</h2>
                                     <!-- Icon Divider-->
                                     <div class="divider-custom">
                                         <div class="divider-custom-line"></div>
