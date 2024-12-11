@@ -135,6 +135,7 @@ h2, .h2 {
 @media (min-width: 1200px) {
   h2, .h2 {
     font-size: 2rem;
+    margin-bottom: 20px;
   }
 }
 
@@ -158,6 +159,7 @@ h4, .h4 {
 
 h5, .h5 {
   font-size: 1.25rem;
+  margin-top: 20px;
 }
 
 h6, .h6 {
