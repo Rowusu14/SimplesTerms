@@ -1,13 +1,12 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';  // In React 18, we use createRoot
-import App from './App.js'
+import ReactDOM from 'react-dom/client';
 import FileReaderComponent from './FileReaderComponent.js';
 
 
 const rootElement = document.getElementById('root');
 
 if (rootElement) {
-  const root = ReactDOM.createRoot(rootElement);  // React 18+ uses createRoot
+  const root = ReactDOM.createRoot(rootElement); 
   root.render(
     <React.StrictMode>
       <FileReaderComponent />
