@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import * as pdfjsLib from "pdfjs-dist"; // Needed to read PDF files
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+
 // Set PDF.js up (online tutorial used for this)
 pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
-
 // List of common words to exclude
 // List of common words to exclude
 const stopWords = [
@@ -29,6 +30,7 @@ const FileReaderComponent = () => {
   const [error, setError] = useState("");  // State to hold error messages
   const [wordCounts, setWordCounts] = useState([]); // State to store the top 10 words
   const [summary, setSummary] = useState(""); // State for API-generated summary
+  const [mode, setMode] = useState("file"); // State to track current mode {NEW}
 
   // Handle file upload
   const handleFileChange = async (event) => {
@@ -148,13 +150,43 @@ const FileReaderComponent = () => {
   //THIS IS WHAT THE USER SEES
   return (
     <div className="container mt-5">
-      <h2>Upload Your File Here!</h2>
-      <input
-        type="file"
-        accept=".pdf, .txt"
-        onChange={handleFileChange}
-        className="form-control mb-3"
-      />
+      <h4 align="center">Select Your Input Type</h4>
+      <div className="mb-3" align="center">
+      <button 
+          className={`btn ${mode === "file" ? "btn-primary" : "btn-outline-primary"}`} 
+          onClick={() => setMode("file")}
+        >
+        	<i class="far fa-file"/> &nbsp; File (.TXT or .PDF)
+        </button> &nbsp; &nbsp;
+        <button 
+          className={`btn ${mode === "text" ? "btn-primary" : "btn-outline-primary"}`} 
+          onClick={() => setMode("text")}
+        >
+        <i class="fas fa-align-center"/> &nbsp; Raw Text
+        </button>
+      </div>
+      
+      {mode === "file" ? (
+        <div>
+          <h2 align="center">Upload Your File Here!</h2>
+          <input
+            type="file"
+            accept=".pdf, .txt"
+            onChange={handleFileChange}
+            className="form-control mb-3"
+          />
+        </div>
+      ) : (
+        <div>
+          <h2 align="center">Enter Your Text Here!</h2>
+          <textarea
+            className="form-control mb-3"
+            rows="10"
+            onChange={(e) => setFileText(e.target.value)}
+            value={fileText}
+          ></textarea>
+        </div>
+      )}
 
       {loading && (
         <div className="spinner-border text-primary" role="status">
